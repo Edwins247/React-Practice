@@ -1,12 +1,11 @@
 import './App.css';
-import Header from './components/Header';
+// import Counter from './components/Counter';
+import Counter2 from './components/Counter2';
 
 function App() {
   return (
     <div className="App">
-      <Header title={"Learn React A"}/>
-      <Header title={"Learn React B"}/>
-      <Header title={"Learn React C"}/>
+      <Counter2 />
     </div>
   );
 }
