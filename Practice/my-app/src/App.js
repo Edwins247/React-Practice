@@ -1,5 +1,5 @@
-import Toggle from "./components/Toggle";
+import CatParent from "./components/CatParent";
 
 export default function App() {
-  return <Toggle />;
+  return <CatParent/>;
 }
