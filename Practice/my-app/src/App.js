@@ -1,8 +1,6 @@
-import './App.css';
-import Calculator from './components/Calculator';
+import React from "react";
+import ClassClock from "./components/ClassClock";
 
-function App() {
-  return <Calculator />;
+export default function App() {
+  return <ClassClock />;
 }
-
-export default App;
