@@ -31,7 +31,7 @@ export default function App() {
     setCards(datas);
   }, []);
 
-  const result = pickedCards.map((pickedCard) => (<BusinessCard info={pickedCard} />));
+  const result = pickedCards.map((pickedCard) => (<BusinessCard info={pickedCard} key={pickedCard.phoneNumber}/>));
 
   return (
   <div>
