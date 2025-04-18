@@ -1,5 +1,5 @@
-import CatParent from "./components/CatParent";
+import OnlineStore from './components/OnlineStore';
 
 export default function App() {
-  return <CatParent/>;
+  return <OnlineStore/>;
 }
