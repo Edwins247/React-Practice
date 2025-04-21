@@ -12,7 +12,7 @@ function App() {
   // blog url : blog page component
 
   return (
-    <>
+    <UserStore>
       <BrowserRouter>
         <Routes>
           <Route path={"/"} element={<MainPage />} />
@@ -24,7 +24,7 @@ function App() {
           <Route path={"blog"} element={<BlogPage />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </UserStore>
   );
 }
 
