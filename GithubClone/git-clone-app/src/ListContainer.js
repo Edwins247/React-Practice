@@ -5,8 +5,8 @@ import cx from "clsx";
 
 import { useState } from "react";
 import ListItemLayout from "./components/ListItemLayout";
-import Modal from "./components/Modal";
 import Pagination from "./components/Pagination";
+import ListFilter from "./components/ListFilter";
 
 export default function ListContainer() {
   const [inputValue, setInputValue] = useState("is:pr is:open");
@@ -61,43 +61,7 @@ export default function ListContainer() {
   );
 }
 
-function ListFilter({ onChangeFilter }) {
-  return (
-    <>
-      <div className={styles.filterLists}>
-        <ListFilterItem>Author</ListFilterItem>
-        <ListFilterItem>Label</ListFilterItem>
-        <ListFilterItem>Projects</ListFilterItem>
-        <ListFilterItem>Milestone</ListFilterItem>
-        <ListFilterItem>Assignee</ListFilterItem>
-        <ListFilterItem>Sort</ListFilterItem>
-      </div>
-    </>
-  );
-}
 
-function ListFilterItem({ onClick, children, onChangeFilter }) {
-  const [showModal, setShowModal] = useState(false);
-
-  return (
-    <div className={styles.filterItem}>
-      <span role="button" onClick={() => setShowModal(true)}>
-        {children} ▾
-      </span>
-      <div className={styles.modalContainer}>
-        <Modal
-          opened={showModal}
-          onClose={() => setShowModal(false)}
-          placeholder="Filter labels"
-          searchDataList={["bug", "Labels", "Apple"]}
-          onClickCell={() => {
-            onChangeFilter();
-          }}
-        />
-      </div>
-    </div>
-  );
-}
 
 function OpenClosedFilters({ data }) {
   const [isOpenMode, setIsOpenMode] = useState(true);
