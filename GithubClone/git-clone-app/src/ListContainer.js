@@ -1,17 +1,34 @@
 import styles from "./ListContainer.module.css";
 import Button from "./components/Button";
 import ListItem from "./components/ListItem";
-import cx from "clsx";
+import axios from "axios";
+import { GITHUB_API } from "./api";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListItemLayout from "./components/ListItemLayout";
 import Pagination from "./components/Pagination";
 import ListFilter from "./components/ListFilter";
+import OpenClosedFilters from "./components/OpenClosedFilters";
 
 export default function ListContainer() {
   const [inputValue, setInputValue] = useState("is:pr is:open");
+  const [checked, setChecked] = useState(false);
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
+  const [isOpenMode, setIsOpenMode] = useState(true);
+  const [params, setParams] = useState();
+  const maxPage = 10;
+
+  async function getData(params) {
+    const data = await axios.get(`${GITHUB_API}/repos/facebook/react/issues`, {
+      params,
+    });
+    setList(data.data);
+  }
+
+  useEffect(() => {
+    getData({ page, state: isOpenMode ? "open" : "closed", ...params });
+  }, [page, isOpenMode, params]);
 
   return (
     <>
@@ -32,68 +49,30 @@ export default function ListContainer() {
             New Issue
           </Button>
         </div>
-        <OpenClosedFilters />
+        <OpenClosedFilters isOpenMode={isOpenMode} onClickMode={setIsOpenMode}/>
         <ListItemLayout className={styles.listFilter}>
-          <ListFilter onChangeFilter={(filteredData) => {}} />
+          <ListFilter onChangeFilter={(params) => {
+            setParams(params);
+          }} />
         </ListItemLayout>
         <div className={styles.container}>
-          {list.map((listItem, index) => (
+          {list.map((item) => (
             <ListItem
-              key={index}
-              badges={[
-                {
-                  color: "red",
-                  title: "Bug",
-                },
-              ]}
+              key={item.id}
+              data={item}
+              checked={checked}
+              onClickCheckBox={() => setChecked((checked) => !checked)}
             />
           ))}
         </div>
       </div>
       <div className={styles.paginationContainer}>
-      <Pagination
-        maxPage={10}
-        currentPage={page}
-        onClickPageButton={(number) => setPage(number)}
-      />
+        <Pagination
+          maxPage={maxPage}
+          currentPage={page}
+          onClickPageButton={(number) => setPage(number)}
+        />
       </div>
     </>
-  );
-}
-
-
-
-function OpenClosedFilters({ data }) {
-  const [isOpenMode, setIsOpenMode] = useState(true);
-
-  const openModeDataSize = 1;
-  const closeModeDataSize = 2;
-  return (
-    <>
-      <OpenClosedFilter
-        size={openModeDataSize}
-        state="Open"
-        onClick={() => setIsOpenMode(true)}
-        selected={isOpenMode}
-      />
-      <OpenClosedFilter
-        size={closeModeDataSize}
-        state="Closed"
-        onClick={() => setIsOpenMode(false)}
-        selected={!isOpenMode}
-      />
-    </>
-  );
-}
-
-function OpenClosedFilter({ size, state, onClick, selected }) {
-  return (
-    <span
-      role="button"
-      className={cx(styles.textFilter, { [styles.selected]: selected })}
-      onClick={onClick}
-    >
-      {size} {state}
-    </span>
   );
 }
