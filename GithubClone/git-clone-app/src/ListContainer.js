@@ -5,7 +5,7 @@ import axios from "axios";
 import { GITHUB_API } from "./api";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import ListItemLayout from "./components/ListItemLayout";
 import Pagination from "./components/Pagination";
 import ListFilter from "./components/ListFilter";
@@ -19,8 +19,8 @@ export default function ListContainer() {
   const maxPage = 10;
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get('page') ?? '1', 10);
-  const state = searchParams.get('state');
+  const page = parseInt(searchParams.get("page") ?? "1", 10);
+  const state = searchParams.get("state");
 
   async function getData(params) {
     const data = await axios.get(`${GITHUB_API}/repos/facebook/react/issues`, {
@@ -42,21 +42,28 @@ export default function ListContainer() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <Button
-            style={{
-              fontSize: "14px",
-              backgroundColor: "green",
-              color: "white",
-            }}
-          >
-            New Issue
-          </Button>
+          <Link to="/new" className={styles.link}>
+            <Button
+              style={{
+                fontSize: "14px",
+                backgroundColor: "green",
+                color: "white",
+              }}
+            >
+              New Issue
+            </Button>
+          </Link>
         </div>
-        <OpenClosedFilters isOpenMode={state !== 'closed'} onClickMode={(mode) => setSearchParams({ mode })}/>
+        <OpenClosedFilters
+          isOpenMode={state !== "closed"}
+          onClickMode={(mode) => setSearchParams({ mode })}
+        />
         <ListItemLayout className={styles.listFilter}>
-          <ListFilter onChangeFilter={(params) => {
-            setParams(params);
-          }} />
+          <ListFilter
+            onChangeFilter={(params) => {
+              setParams(params);
+            }}
+          />
         </ListItemLayout>
         <div className={styles.container}>
           {list.map((item) => (
@@ -73,7 +80,9 @@ export default function ListContainer() {
         <Pagination
           maxPage={maxPage}
           currentPage={page}
-          onClickPageButton={(pageNumber) => setSearchParams({ page: pageNumber })}
+          onClickPageButton={(pageNumber) =>
+            setSearchParams({ page: pageNumber })
+          }
         />
       </div>
     </>
