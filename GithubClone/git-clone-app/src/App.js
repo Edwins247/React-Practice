@@ -9,10 +9,13 @@ import Security from "./pages/Security";
 import Actions from "./pages/Actions";
 import Nav from "./components/Nav";
 import Header from "./Header";
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Nav />
       <Header />
       <Routes>
@@ -25,7 +28,7 @@ function App() {
         <Route path="/security" element={<Security />} />
         <Route path="/actions" element={<Actions />} />
       </Routes>
-    </>
+    </QueryClientProvider>
   );
 }
 
