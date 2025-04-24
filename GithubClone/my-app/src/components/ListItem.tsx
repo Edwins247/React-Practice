@@ -1,6 +1,6 @@
-import Badge from "./Badge";
+import Badge, { BadgeProps } from "./Badge";
 import styles from "./ListItem.module.css";
-import { ListItem as ListItemType } from "../model/issues";
+import { ListItem as ListItemType, STATE } from "../model/issues";
 import ListItemLayout from "./ListItemLayout";
 import dayjs from "dayjs";
 
@@ -17,8 +17,8 @@ export default function ListItem({
   onClickTitle,
   data
 }: Props) {
-  const badges = data.labels;
-  const state = data.state === 'open' ? 'opened' : 'closed';
+  const badges = data.labels as BadgeProps[];
+  const state = data.state === STATE.OPEN ? 'opened' : 'closed';
   const date = data.state === 'open' ? data.created_at : data.closed_at;
 
   return (

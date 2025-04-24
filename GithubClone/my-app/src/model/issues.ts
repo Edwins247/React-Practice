@@ -12,10 +12,15 @@ export interface Data {
 
 export type List = Partial<DataItem> & { name : string };
 
+export enum STATE {
+    OPEN = 'open',
+    CLOSE = 'close',
+}
+
 export interface ListItem {
     id: string;
-    labels: BadgeProps[];
-    state: 'open' | 'close';
+    labels?: BadgeProps[];
+    state: STATE;
     created_at: string;
     closed_at: string;
     title: string;
