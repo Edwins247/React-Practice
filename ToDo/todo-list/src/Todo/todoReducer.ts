@@ -1,3 +1,5 @@
+import { saveTodos } from "./todoStorage";
+
 export type TodoType = {
   id: number;
   text: string;
@@ -10,75 +12,96 @@ export type TodoStateType = {
 
 export type TodoActionType =
   | {
-      type: "add"
+      type: "add";
       payload: {
-        text: string
-      }
+        text: string;
+      };
     }
   | {
-      type: "remove"
+      type: "remove";
       payload: {
-        id: number
-      }
+        id: number;
+      };
     }
   | {
-      type: "checked",
+      type: "checked";
       payload: {
-        id: number
-      }
+        id: number;
+      };
     }
   | {
-      type: "allChecked",
-      payload: boolean
+      type: "allChecked";
+      payload: boolean;
     }
   | {
       type: "allRemove";
     };
 
-export const todoReducer = (
-  state: TodoStateType,
-  action: TodoActionType
-) => {
+export const todoReducer = (state: TodoStateType, action: TodoActionType) => {
   switch (action.type) {
     case "add":
+      const newTodos = state.todos.concat({
+        id: Date.now(),
+        text: action.payload.text,
+        isChecked: false,
+      });
+
+      saveTodos(newTodos);
+
       return {
-        todos: state.todos.concat({
-            id: Date.now(),
-            text: action.payload.text,
-            isChecked: false
-          })
+        todos: newTodos,
       };
-    case "remove":
+    case "remove": {
+      const newTodos = state.todos.filter((todo) => {
+        return todo.id !== action.payload.id;
+      });
+
+      saveTodos(newTodos);
+
       return {
-        todos: state.todos.filter(todo => {
-            return todo.id !== action.payload.id
-          })
+        todos: newTodos,
       };
-    case "checked":
+    }
+
+    case "checked": {
+      const newTodos = state.todos.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            isChecked: !todo.isChecked,
+          };
+        }
+
+        return todo;
+      });
+
+      saveTodos(newTodos);
+
       return {
-        todos: state.todos.map(todo => {
-            if (todo.id === action.payload.id) {
-              return {
-                ...todo,
-                isChecked: !todo.isChecked
-              }
-            }
-            
-            return todo
-          })
+        todos: newTodos,
       };
-    case "allChecked":
+    }
+
+    case "allChecked": {
+      const newTodos = state.todos.map((todo) => {
+        return {
+          ...todo,
+          isChecked: !action.payload,
+        };
+      });
+
+      saveTodos(newTodos);
+
       return {
-        todos: state.todos.map(todo => {
-            return {
-              ...todo,
-              isChecked: !action.payload
-            }
-          })
+        todos: newTodos,
       };
-    case "allRemove":
+    }
+
+    case "allRemove": {
+      saveTodos([]);
       return {
-        todos: []
+        todos: [],
       };
+    }
   }
 };
